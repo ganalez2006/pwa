@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Test PWA</title>
+	<link rel="manifest" href="./manifest.json">
+	<link rel="shortcut icon" type="image/x-icon" href="./images/icons/launcher-icon-1x.png"/>
+</head>
+<body>
+	<h1>Test PWA</h1>
+
+	<a href="image.html">Image</a>
+	<a href="otra.html">Otra</a>
+
+	<script>
+	if ('serviceWorker' in navigator) {
+		window.addEventListener('load', function() {
+			navigator.serviceWorker.register('./service-workers.js').then(function(registration) {
+				// Si es exitoso
+				console.log('SW registrado correctamente');
+			}, function(err) {
+				// Si falla
+				console.log('SW fallo', err);
+			});
+		});
+	}
+	</script>
+	<script src="js/app.js"></script>
+</body>
+</html>
