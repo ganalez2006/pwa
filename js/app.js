@@ -25,6 +25,9 @@ Notification.requestPermission(function (permission) {
 });
 
 function show() {
+	
+	const textbox = document.getElementById('text');
+	
 	window.setTimeout(function () {
 
 		var instance = new Notification(
@@ -37,20 +40,24 @@ function show() {
 		instance.onclick = function () {
 			// Something to do
 			console.log('onclick');
+			textbox.innerHTML = 'onclick';
 		};
 		instance.onerror = function () {
 			// Something to do
 			console.log('onerror');
+			textbox.innerHTML = 'onerror';
 		};
 		instance.onshow = function () {
 			// Something to do
 			console.log('onshow');
+			textbox.innerHTML = 'onshow';
 		};
 		instance.onclose = function () {
 			// Something to do
 			console.log('onclose');
+			textbox.innerHTML = 'onclose';
 		};
-	}, 3000);
+	}, 0000);
 
 	return false;
 }
