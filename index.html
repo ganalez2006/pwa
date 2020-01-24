@@ -89,25 +89,15 @@
 	}
 
 
-	function show() {
-
-		textbox.innerHTML += '<li>Mostrar notificación.</li>';
-
-		var img = './images/icons/launcher-icon-1x.png';
-		var text = 'Contenido de la notificación.';
-		var notification = new Notification('Título de la notificación', { body: text, icon: img });
-	}
-
-
 	function showNotification() {
 		Notification.requestPermission(function(result) {
 			if (result === 'granted') {
 				navigator.serviceWorker.ready.then(function(registration) {
-					registration.showNotification('Vibration Sample', {
-						body: 'Buzz! Buzz!',
-						icon: './images/icons/launcher-icon-1x.png',
-						vibrate: [200, 100, 200, 100, 200, 100, 200],
-						tag: 'vibration-sample'
+					registration.showNotification('Título de la notificación', {
+						// occiones
+						body: 'Mensaje de la notificación.'
+						, icon: './images/icons/launcher-icon-1x.png'
+						, tag: 'jgil-pwa-test'
 					});
 				});
 			}
