@@ -1,4 +1,4 @@
-var CACHEVERSION = "v1";
+var CACHEVERSION = "v2";
 var CACHENAME = "cachestore-" + CACHEVERSION;
 var FILES = [
 	"./index.html"

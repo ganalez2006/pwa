@@ -33,7 +33,7 @@ function show() {
 		instance.onclose = function () {
 			// Something to do
 		};
-	}, 10000);
+	}, 0);
 
 	return false;
 }
