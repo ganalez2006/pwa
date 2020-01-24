@@ -60,6 +60,7 @@
 		// Let's check if the browser supports notifications
 		if (!"Notification" in window) {
 			console.log("This browser does not support notifications.");
+			textbox.innerHTML += '<li>This browser does not support notifications.</li>';
 		} else {
 			if(checkNotificationPromise()) {
 				Notification.requestPermission()
