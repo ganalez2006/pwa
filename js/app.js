@@ -88,7 +88,7 @@ Notification.requestPermission().then(function(permission) {
 
 /**/
 
-function show() {
+function show2() {
 
 	textbox.innerHTML += '<li>click show</li>';
 	alert('asdasd');

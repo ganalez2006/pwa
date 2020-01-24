@@ -29,6 +29,8 @@
 	<script src="js/app.js"></script>
 	<script>
 
+	"use strict";
+
 	var notificationBtn = document.getElementById('enable');
 
 	if(('permission' in Notification) && (Notification.permission === 'granted') ){
@@ -83,6 +85,13 @@
 		}
 
 		return true;
+	}
+
+
+	function show() {
+		var img = './images/icons/launcher-icon-1x.png';
+		var text = 'HEY! Your task is now overdue.';
+		var notification = new Notification('To do list', { body: text, icon: img });
 	}
 	</script>
 </body>
