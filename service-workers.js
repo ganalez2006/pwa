@@ -70,6 +70,10 @@ self.addEventListener('notificationclick', event => {
 		console.debug(event.action);
 	}
 
+	console.debug(event.notification.data);
+	if (event.notification.data.url)
+		return clients.openWindow(event.notification.data.url);
+
 	event.waitUntil(clients.matchAll({
 		type: "window"
 	}).then(function(clientList) {
@@ -89,15 +93,16 @@ self.addEventListener('notificationclick', event => {
 
 
 self.addEventListener('push', function(event) {
+
 	console.log('[Service Worker] Push Received.');
 	console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
 
-	console.debug(event.data);
+	console.log('event.data', event.data);
 
 	const title = 'Push Notificacion';
 	const options = {
 		body: event.data.text()
-		, badge: './images/icons/launcher-icon-1x.png'
+		, badge: './images/icons/launcher-icon-16x16.png'
 		, icon: './images/icons/launcher-icon-1x.png'
 		, image: './images/p6.jpg' //320x220px
 		, tag: 'push'
@@ -105,6 +110,9 @@ self.addEventListener('push', function(event) {
 			{action: 'uno', title: 'title uno'}
 			, {action: 'dos', title: 'title dos'}
 		]
+		, data: {
+			url: 'http://google.com'
+		}
 	};
 
 	event.waitUntil(self.registration.showNotification(title, options));
