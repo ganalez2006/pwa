@@ -27,6 +27,8 @@ if(('permission' in Notification) && (Notification.permission === 'granted') ){
 	notificationBtn.style.display = 'none';
 }
 
+textbox.innerHTML += '<li>' + Notification.permission + '</li>';
+
 function askNotificationPermission() {
 
 
