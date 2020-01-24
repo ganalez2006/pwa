@@ -27,7 +27,7 @@
 
 	<ul id="text"></ul>
 
-	<script src="js/app.js"></script>
+	<script src="js/app.js?v=1"></script>
 	<script>
 
 	"use strict";
@@ -99,7 +99,7 @@
 				navigator.serviceWorker.ready.then(function(registration) {
 					registration.showNotification('Título de la notificación', {
 						// occiones
-						body: 'Mensaje de la notificación.'
+						body: 'Mensaje de la notificación. 2'
 						, icon: './images/icons/launcher-icon-1x.png'
 						, tag: 'jgil-pwa-test'
 					});

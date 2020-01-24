@@ -1,7 +1,7 @@
 // Agregar serviceWorker
 if ('serviceWorker' in navigator) {
 	window.addEventListener('load', function() {
-		navigator.serviceWorker.register('./service-workers.js').then(function(registration) {
+		navigator.serviceWorker.register('./service-workers.js?v=1').then(function(registration) {
 			// Si es exitoso
 			console.log('SW registrado correctamente');
 			textbox.innerHTML += '<li>SW registrado correctamente</li>';
