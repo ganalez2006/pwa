@@ -32,6 +32,7 @@ Notification.requestPermission().then(function(permission) {
 function show() {
 
 	textbox.innerHTML += '<li>click show</li>';
+	alert('asdasd');
 	
 	window.setTimeout(function () {
 

@@ -1,4 +1,4 @@
-var CACHEVERSION = "v4";
+var CACHEVERSION = "v2";
 var CACHENAME = "cachestore-" + CACHEVERSION;
 var FILES = [
 	"./index.html"
@@ -46,7 +46,7 @@ self.addEventListener("fetch", function(event) {
 /**/
 
 /**/
-// networkFirst
+// (estrategia offline) networkFirst
 self.addEventListener("fetch", function(event) {
 	event.respondWith(
 		fetch(event.request).catch(function() {
