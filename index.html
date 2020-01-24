@@ -89,9 +89,12 @@
 
 
 	function show() {
+
+		textbox.innerHTML += '<li>Mostrar notificación.</li>';
+
 		var img = './images/icons/launcher-icon-1x.png';
-		var text = 'HEY! Your task is now overdue.';
-		var notification = new Notification('To do list', { body: text, icon: img });
+		var text = 'Contenido de la notificación.';
+		var notification = new Notification('Título de la notificación', { body: text, icon: img });
 	}
 	</script>
 </body>
