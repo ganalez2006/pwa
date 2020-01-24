@@ -30,6 +30,8 @@ Notification.requestPermission(function (permission) {
 });
 
 function show() {
+
+	textbox.innerHTML += '<li>click show</li>';
 	
 	window.setTimeout(function () {
 
