@@ -1,4 +1,4 @@
-var CACHEVERSION = "v2";
+var CACHEVERSION = "v3";
 var CACHENAME = "cachestore-" + CACHEVERSION;
 var FILES = [
 	"./index.html"
@@ -32,7 +32,7 @@ self.addEventListener('activate', function(event) {
 		);
 });
 
-/**/
+/**
 // (estrategia offline) cacheFirst con página de error
 self.addEventListener("fetch", function(event) {
 	event.respondWith(
@@ -40,6 +40,17 @@ self.addEventListener("fetch", function(event) {
 			return caches.match(event.request).then(function(response) {
 				return response || caches.match("./offline.html");
 			});
+		})
+		);
+});
+/**/
+
+/**/
+// networkFirst
+self.addEventListener("fetch", function(event) {
+	event.respondWith(
+		fetch(event.request).catch(function() {
+			return caches.match(event.request);
 		})
 		);
 });
