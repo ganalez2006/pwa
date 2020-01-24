@@ -21,6 +21,7 @@ var app = {
 
 console.debug(app.saludo);
 
+/**
 var notificationBtn = document.getElementById('enable');
 
 if(('permission' in Notification) && (Notification.permission === 'granted') ){
