@@ -24,7 +24,7 @@ console.debug(app.saludo);
 // Agregar notificaciones push
 var Notification = window.Notification || window.mozNotification || window.webkitNotification;
 
-Notification.requestPermission(function (permission) {
+Notification.requestPermission().then(function(permission) {
 	// console.log(permission);
 	textbox.innerHTML += '<li>permission</li>';
 });
