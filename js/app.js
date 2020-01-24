@@ -21,10 +21,14 @@ var app = {
 
 console.debug(app.saludo);
 
+var notificationBtn = document.getElementById('enable');
+
+if(('permission' in Notification) && (Notification.permission === 'granted') ){
+	notificationBtn.style.display = 'none';
+}
 
 function askNotificationPermission() {
 
-	var notificationBtn = document.getElementById('enable');
 
 	// function to actually ask the permissions
 	function handlePermission(permission) {
