@@ -1,4 +1,5 @@
-var CACHENAME = "cachestore-v1";
+var CACHEVERSION = "v1";
+var CACHENAME = "cachestore-" + CACHEVERSION;
 var FILES = [
 	"./index.html"
 	, "./offline.html"
@@ -17,7 +18,6 @@ self.addEventListener("install", function(event) {
 });
 
 self.addEventListener('activate', function(event) {
-	var version = 'v1';
 	event.waitUntil(
 		caches.keys()
 		.then(cacheNames =>
@@ -25,23 +25,12 @@ self.addEventListener('activate', function(event) {
 				cacheNames
 				.map(c => c.split('-'))
 				.filter(c => c[0] === 'cachestore')
-				.filter(c => c[1] !== version)
+				.filter(c => c[1] !== CACHEVERSION)
 				.map(c => caches.delete(c.join('-')))
 				)
 			)
 		);
 });
-
-/**
-// (estrategia offline) cacheFirst
-self.addEventListener("fetch", function(event) {
-	event.respondWith(
-		caches.match(event.request).then(function(response) {
-			return response || fetch(event.request);
-		})
-	);
-});
-/**/
 
 /**/
 // (estrategia offline) cacheFirst con página de error
