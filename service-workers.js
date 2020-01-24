@@ -45,7 +45,7 @@ self.addEventListener("fetch", function(event) {
 });
 /**/
 
-/**/
+/**
 // (estrategia offline) networkFirst
 self.addEventListener("fetch", function(event) {
 	event.respondWith(
@@ -54,4 +54,29 @@ self.addEventListener("fetch", function(event) {
 		})
 		);
 });
+/**/
+
+/**/
+// Notificacion click
+self.addEventListener('notificationclick', event => {
+
+	console.debug(event);
+	console.log('On notification click: ', event.notification.tag);
+	event.notification.close();
+
+	event.waitUntil(clients.matchAll({
+		type: "window"
+	}).then(function(clientList) {
+
+		for (var i = 0; i < clientList.length; i++) {
+
+			var client = clientList[i];
+			return client.focus();
+		}
+
+		if (clients.openWindow)
+			return clients.openWindow('./');
+	}));
+
+}, false);
 /**/

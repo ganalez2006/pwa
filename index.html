@@ -23,7 +23,7 @@
 	<a href="image.html">Image</a>
 	<a href="otra.html">Otra</a>
 	<a href="#" onclick="return show()">Notify me!</a>
-	<a href="#" onclick="showNotification()">Notify me!</a>
+	<a href="" onclick="showNotification(event)">Notify me!</a>
 
 	<ul id="text"></ul>
 
@@ -31,6 +31,8 @@
 	<script>
 
 	"use strict";
+
+	const textbox = document.getElementById('text');
 
 	var notificationBtn = document.getElementById('enable');
 
@@ -88,8 +90,10 @@
 		return true;
 	}
 
+	function showNotification(event) {
 
-	function showNotification() {
+		event.preventDefault();
+
 		Notification.requestPermission(function(result) {
 			if (result === 'granted') {
 				navigator.serviceWorker.ready.then(function(registration) {

@@ -1,5 +1,3 @@
-const textbox = document.getElementById('text');
-
 // Agregar serviceWorker
 if ('serviceWorker' in navigator) {
 	window.addEventListener('load', function() {
