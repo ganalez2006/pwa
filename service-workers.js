@@ -64,6 +64,12 @@ self.addEventListener('notificationclick', event => {
 	console.log('On notification click: ', event.notification.tag);
 	event.notification.close();
 
+	if (event.action === 'uno') {
+		console.debug(event.action);
+	} else if (event.action === 'dos') {
+		console.debug(event.action);
+	}
+
 	event.waitUntil(clients.matchAll({
 		type: "window"
 	}).then(function(clientList) {
@@ -80,3 +86,26 @@ self.addEventListener('notificationclick', event => {
 
 }, false);
 /**/
+
+
+self.addEventListener('push', function(event) {
+	console.log('[Service Worker] Push Received.');
+	console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
+
+	console.debug(event.data);
+
+	const title = 'Push Notificacion';
+	const options = {
+		body: event.data.text()
+		, badge: './images/icons/launcher-icon-1x.png'
+		, icon: './images/icons/launcher-icon-1x.png'
+		, image: './images/p6.jpg' //320x220px
+		, tag: 'push'
+		, actions: [
+			{action: 'uno', title: 'title uno'}
+			, {action: 'dos', title: 'title dos'}
+		]
+	};
+
+	event.waitUntil(self.registration.showNotification(title, options));
+});
