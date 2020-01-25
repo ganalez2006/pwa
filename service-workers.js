@@ -67,7 +67,7 @@ self.addEventListener('push', function(event) {
 			body: 'mensaje de la notificación'
 			, tag: 'push-' + tag
 			, icon: './images/icons/launcher-icon-1x.png'
-			, image: './images/p6.jpg' //600x400px
+			, image: './images/p0.jpg' //Relacion aspecto 10:4
 			, actions: [
 				{
 					action: 'reply'
@@ -122,7 +122,7 @@ self.addEventListener('notificationclose', event => {
 self.addEventListener('notificationclick', event => {
 
 	console.debug(event);
-	event.notification.close();
+	//event.notification.close();
 
 	switch(event.action) {
 		case 'reply':
