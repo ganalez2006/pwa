@@ -1,9 +1,9 @@
-var CACHEVERSION = "v2";
-var CACHENAME = "cachestore-" + CACHEVERSION;
+var CACHEVERSION = "v1";
+var CACHESEPARATOR = "-";
+var CACHENAME = "cachestore" + CACHESEPARATOR + CACHEVERSION;
 var FILES = [
 	"./index.html"
 	, "./offline.html"
-	//, "./css/style.css",
 	, "./js/app.js"
 	, "./image.html"
 	, "./images/icons/launcher-icon-4x.png"
@@ -23,16 +23,15 @@ self.addEventListener('activate', function(event) {
 		.then(cacheNames =>
 			Promise.all(
 				cacheNames
-				.map(c => c.split('-'))
-				.filter(c => c[0] === 'cachestore')
+				.map(c => c.split(CACHESEPARATOR))
+				.filter(c => c[0] === CACHENAME)
 				.filter(c => c[1] !== CACHEVERSION)
-				.map(c => caches.delete(c.join('-')))
+				.map(c => caches.delete(c.join(CACHESEPARATOR)))
 				)
 			)
 		);
 });
 
-/**
 // (estrategia offline) cacheFirst con página de error
 self.addEventListener("fetch", function(event) {
 	event.respondWith(
@@ -45,8 +44,7 @@ self.addEventListener("fetch", function(event) {
 });
 /**/
 
-/**
-// (estrategia offline) networkFirst
+/*/ (estrategia offline) networkFirst
 self.addEventListener("fetch", function(event) {
 	event.respondWith(
 		fetch(event.request).catch(function() {
@@ -56,24 +54,92 @@ self.addEventListener("fetch", function(event) {
 });
 /**/
 
+// Evento al recibir una peticion push desde el backend
+self.addEventListener('push', function(event) {
+
+	/*/ Push data example
+	var tag = new Date();
+	tag = tag.getTime();
+
+	var data_example = {
+		title: 'título de la notificación'
+		, options: {
+			body: 'mensaje de la notificación'
+			, tag: 'push-' + tag
+			, icon: './images/icons/launcher-icon-1x.png'
+			, image: './images/p6.jpg' //600x400px
+			, actions: [
+				{
+					action: 'reply'
+					, title: 'Responder'
+					, type: 'text'
+					, placeholder: 'Escribe tu respuesta'
+				}
+				, {
+					action: 'action'
+					, title: 'Me interesa'
+					, type: 'button'
+				}
+			]
+			, data: {
+				id: 9999
+				, url: 'https://google.com'
+			}
+		}
+	};
+	console.debug(JSON.stringify(data_example));
+	return;
+	/**/
+
+	try {
+		var data = event.data.json();
+
+		if (('title' in data) && ('options' in data)) {
+
+			event.waitUntil(self.registration.showNotification(data.title, data.options));
+		}
+	}
+	catch(error) {
+		//console.error(error);
+	}
+});
+
+// Evento al recibir una peticion sync desde el backend
+self.addEventListener('sync', function(event) {
+	console.debug(event.tag);
+
+	SWApp.syncLocales();
+});
 /**/
-// Notificacion click
+
+// Evento al cerrar la notificacion
+self.addEventListener('notificationclose', event => {
+	console.debug(event);
+});
+/**/
+
+// Evento al hacer click en la notificacion
 self.addEventListener('notificationclick', event => {
 
 	console.debug(event);
-	console.log('On notification click: ', event.notification.tag);
 	event.notification.close();
 
-	if (event.action === 'uno') {
-		console.debug(event.action);
-	} else if (event.action === 'dos') {
-		console.debug(event.action);
+	switch(event.action) {
+		case 'reply':
+			console.debug(event.reply);
+			break;
+		case 'action':
+			console.debug(event.action);
+			break;
 	}
 
 	console.debug(event.notification.data);
+	/*/ Para redireccionar a la url especificada por el cliente (solo clientes de pago)
 	if (event.notification.data.url)
 		return clients.openWindow(event.notification.data.url);
+	/**/
 
+	/*/ Ir a la aplicación
 	event.waitUntil(clients.matchAll({
 		type: "window"
 	}).then(function(clientList) {
@@ -87,33 +153,15 @@ self.addEventListener('notificationclick', event => {
 		if (clients.openWindow)
 			return clients.openWindow('./');
 	}));
+	/**/
 
 }, false);
 /**/
 
-
-self.addEventListener('push', function(event) {
-
-	console.log('[Service Worker] Push Received.');
-	console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
-
-	console.log('event.data', event.data);
-
-	const title = 'Push Notificacion';
-	const options = {
-		body: event.data.text()
-		, badge: './images/icons/launcher-icon-16x16.png'
-		, icon: './images/icons/launcher-icon-1x.png'
-		, image: './images/p6.jpg' //320x220px
-		, tag: 'push'
-		, actions: [
-			{action: 'uno', title: 'title uno'}
-			, {action: 'dos', title: 'title dos'}
-		]
-		, data: {
-			url: 'http://google.com'
-		}
-	};
-
-	event.waitUntil(self.registration.showNotification(title, options));
-});
+// Utilidades
+var SWApp = {
+	syncLocales : () => {
+		console.debug('syncLocales');
+	}
+};
+/**/
