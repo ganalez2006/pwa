@@ -62,26 +62,25 @@ self.addEventListener('push', function(event) {
 	tag = tag.getTime();
 
 	var data_example = {
-		title: 'título de la notificación'
+		title: 'Título'
 		, options: {
-			body: 'mensaje de la notificación'
+			body: 'Mensaje'
 			, tag: 'push-' + tag
-			, badge: './images/icons/icon-72x72.png'
+			, vibrate: [200, 100, 200]
+			, renotify: true
 			, icon: './images/icons/launcher-icon-1x.png'
-			, image: './images/p1.jpg' //Relacion aspecto 10:4
+			, image: './images/p3.jpg' //Relacion aspecto 10:4
 			, actions: [
 				{
 					action: 'reply'
 					, title: 'Responder'
 					, type: 'text'
 					, placeholder: 'Escribe tu respuesta'
-					, icon: './images/icons/launcher-icon-4x.png'
 				}
 				, {
 					action: 'action'
 					, title: 'Me interesa'
 					, type: 'button'
-					, icon: './images/icons/launcher-icon-4x.png'
 				}
 			]
 			, data: {
@@ -91,7 +90,6 @@ self.addEventListener('push', function(event) {
 		}
 	};
 	console.debug(JSON.stringify(data_example));
-	return;
 	/**/
 
 	try {
@@ -129,15 +127,20 @@ self.addEventListener('notificationclick', event => {
 	if (event.action !== '')
 		console.debug(event.action);
 
-	if (event.reply !== null)
+	if ((event.reply !== '') && (event.reply !== null))
 		console.debug(event.reply);
 
 	event.notification.close();
 
 	console.debug(event.notification.data);
-	/*/ Para redireccionar a la url especificada por el cliente (solo clientes de pago)
-	if (event.notification.data.url)
-		return clients.openWindow(event.notification.data.url);
+	/*/ Para redireccionar a la url especificada por el cliente
+	try {
+		if (event.notification.data.url)
+			return clients.openWindow(event.notification.data.url);
+	}
+	catch(error) {
+		//console.error(error);
+	}
 	/**/
 
 	/*/ Ir a la aplicación
