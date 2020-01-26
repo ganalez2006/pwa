@@ -66,19 +66,22 @@ self.addEventListener('push', function(event) {
 		, options: {
 			body: 'mensaje de la notificación'
 			, tag: 'push-' + tag
+			, badge: './images/icons/icon-72x72.png'
 			, icon: './images/icons/launcher-icon-1x.png'
-			, image: './images/p0.jpg' //Relacion aspecto 10:4
+			, image: './images/p1.jpg' //Relacion aspecto 10:4
 			, actions: [
 				{
 					action: 'reply'
 					, title: 'Responder'
 					, type: 'text'
 					, placeholder: 'Escribe tu respuesta'
+					, icon: './images/icons/launcher-icon-4x.png'
 				}
 				, {
 					action: 'action'
 					, title: 'Me interesa'
 					, type: 'button'
+					, icon: './images/icons/launcher-icon-4x.png'
 				}
 			]
 			, data: {
@@ -122,16 +125,14 @@ self.addEventListener('notificationclose', event => {
 self.addEventListener('notificationclick', event => {
 
 	console.debug(event);
-	//event.notification.close();
 
-	switch(event.action) {
-		case 'reply':
-			console.debug(event.reply);
-			break;
-		case 'action':
-			console.debug(event.action);
-			break;
-	}
+	if (event.action !== '')
+		console.debug(event.action);
+
+	if (event.reply !== null)
+		console.debug(event.reply);
+
+	event.notification.close();
 
 	console.debug(event.notification.data);
 	/*/ Para redireccionar a la url especificada por el cliente (solo clientes de pago)

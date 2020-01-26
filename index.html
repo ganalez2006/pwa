@@ -12,11 +12,29 @@
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+	<style>
+	.hide {
+		display: none;
+	}
+	</style>
 </head>
 <body>
 	<h1>Test PWA</h1>
 
-	<button id="enable" onclick="askNotificationPermission()">Enable notifications</button>
+	<div id="msgServiceUnsupported" class="hide">
+		<p>
+			Mensaje servicio no soportado
+		</p>
+	</div>
+
+	<div id="msgNotificationDenied" class="hide">
+		<p>
+			Mensaje Notificaiones bloqueadas
+		</p>
+	</div>
+
+	<button id="btnSubscription" class="hide">Habilitar notificaciones</button>
 
 	<hr>
 
@@ -25,10 +43,10 @@
 	<a href="#" onclick="return show()">Notify me!</a>
 	<a href="" onclick="showNotification(event)">Notify me!</a>
 
-	<ul id="text"></ul>
+	<ul id="listLog"></ul>
 
-	<script src="js/app.js?v=1"></script>
-	<script>
+	<script src="js/app.js"></script>
+	<!--script>
 
 	"use strict";
 
@@ -107,6 +125,6 @@
 			}
 		});
 	}
-	</script>
+	</script-->
 </body>
 </html>

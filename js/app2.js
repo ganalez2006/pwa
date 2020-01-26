@@ -68,30 +68,12 @@ var app = {
 				// Si es exitoso
 				console.log('SW registrado correctamente');
 				app.listLog.innerHTML += '<li>SW registrado correctamente</li>';
-				app.registerSubscription();
 			}, function(err) {
 				// Si falla
 				console.debug('SW error', err);
 				app.listLog.innerHTML += '<li>SW error</li>';
 			});
 		}
-	}
-	// registrar suscripción en el servidor
-	, registerSubscription: () => {
-
-		var pushServerKey = ''
-
-		return navigator.serviceWorker.ready.then(serviceWorker => {
-			return serviceWorker.pushManager
-			.subscribe({
-				userVisibleOnly: true
-				, aplicationServerKey: pushServerKey
-			})
-			.then(subscription => {
-				console.debug('suscription', suscription);
-				return suscription;
-			});
-		});
 	}
 };
 
