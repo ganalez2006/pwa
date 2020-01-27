@@ -45,51 +45,57 @@
 
 	<ul id="listLog"></ul>
 
-	<!-- The core Firebase JS SDK is always required and must be listed first -->
-	<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-messaging.js"></script>
 
-	<!-- TODO: Add SDKs for Firebase products that you want to use
-	https://firebase.google.com/docs/web/setup#available-libraries -->
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
 
-	<script>
-	// Your web app's Firebase configuration
-	var firebaseConfig = {
-		apiKey: "AIzaSyCuMQvWQDrPlsx4g24Ym2RNo3jd5Ts2bkE",
-		authDomain: "test-pwa-6be03.firebaseapp.com",
-		databaseURL: "https://test-pwa-6be03.firebaseio.com",
-		projectId: "test-pwa-6be03",
-		storageBucket: "test-pwa-6be03.appspot.com",
-		messagingSenderId: "228335643470",
-		appId: "1:228335643470:web:e478c73ea06b9c6b858c1f"
-	};
-	// Initialize Firebase
-	firebase.initializeApp(firebaseConfig);
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCuMQvWQDrPlsx4g24Ym2RNo3jd5Ts2bkE",
+    authDomain: "test-pwa-6be03.firebaseapp.com",
+    databaseURL: "https://test-pwa-6be03.firebaseio.com",
+    projectId: "test-pwa-6be03",
+    storageBucket: "test-pwa-6be03.appspot.com",
+    messagingSenderId: "228335643470",
+    appId: "1:228335643470:web:e478c73ea06b9c6b858c1f"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
 
-	// Retrieve Firebase Messaging object.
-	const messaging = firebase.messaging();
-	// Add the public key generated from the console here.
-	messaging.usePublicVapidKey("BD1q7scbIb_UGTNaRkU6MeHQrFx8FJnRjRUvT415NyhYzaer44Lsa7uldgPchm75xvprGc1n-PUNQUVxW6yZqqo");
+  console.debug(firebase);
 
-	// Get Instance ID token. Initially this makes a network call, once retrieved
-	// subsequent calls to getToken will return from cache.
-	messaging.getToken().then((currentToken) => {
-		if (currentToken) {
-			sendTokenToServer(currentToken);
-			updateUIForPushEnabled(currentToken);
-		} else {
-			// Show permission request.
-			console.log('No Instance ID token available. Request permission to generate one.');
-			// Show permission UI.
-			updateUIForPushPermissionRequired();
-			setTokenSentToServer(false);
-		}
-	}).catch((err) => {
-		console.log('An error occurred while retrieving token. ', err);
-		showToken('Error retrieving Instance ID token. ', err);
-		setTokenSentToServer(false);
-	});
+// Retrieve Firebase Messaging object.
+const messaging = firebase.messaging();
+  console.debug(messaging);
 
-	</script>
+// Add the public key generated from the console here.
+messaging.usePublicVapidKey("BD1q7scbIb_UGTNaRkU6MeHQrFx8FJnRjRUvT415NyhYzaer44Lsa7uldgPchm75xvprGc1n-PUNQUVxW6yZqqo");
+
+// Get Instance ID token. Initially this makes a network call, once retrieved
+// subsequent calls to getToken will return from cache.
+messaging.getToken().then((currentToken) => {
+  if (currentToken) {
+    sendTokenToServer(currentToken);
+    updateUIForPushEnabled(currentToken);
+  } else {
+    // Show permission request.
+    console.log('No Instance ID token available. Request permission to generate one.');
+    // Show permission UI.
+    updateUIForPushPermissionRequired();
+    setTokenSentToServer(false);
+  }
+}).catch((err) => {
+  console.log('An error occurred while retrieving token. ', err);
+  showToken('Error retrieving Instance ID token. ', err);
+  setTokenSentToServer(false);
+});
+</script>	
+
+
 	<script src="js/app.js"></script>
 </body>
 </html>
