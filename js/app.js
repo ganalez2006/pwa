@@ -122,7 +122,7 @@ var app = {
 		// subsequent calls to getToken will return from cache.
 		messaging.getToken().then((currentToken) => {
 			if (currentToken) {
-				console.debug(currentToken);
+				console.debug('currentToken', currentToken);
 
 				app.listLog.innerHTML += '<li>currentToken</li>';
 				app.listLog.innerHTML += '<li>'+currentToken+'</li>';
