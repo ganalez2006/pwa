@@ -144,7 +144,6 @@ var app = {
 	//
 	, init: () => {
 
-
 		if (app.serviceSupported()) {
 
 			// iniciar servicios de firebase
@@ -173,6 +172,15 @@ var app = {
 				//app.askNotificationPermission();
 				app.registerSubscriptionFirebase();
 			};
+		}
+
+		try {
+			app.firebaseMessaging.getToken().then((token) => { 
+				console.debug(token);
+			});
+		}
+		catch(error) {
+			console.error(error);
 		}
 	}
 };
