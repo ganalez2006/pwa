@@ -58,6 +58,8 @@ $body = array(
 		)
 	);
 
+echo '<pre>'.json_encode($body).'</pre>';
+
 $to = [];
 $to['redmi'] = 'fTQIiN665_z6AuaWsarX6s:APA91bHIliwGYXaminX9bGxpdSucIWrt4p1CB53GkPhOWNnBsQSd7oNAZ18_z6U7G6pT4LR5oaYBj6f_lhVhrFYub1pdXXW3AwE8jLxkk0gHTF335SAK3PYZJByzBVbQOa9p0vo5Eo4R';
 $to['laptop'] = 'cjdd1DB4eY0w3cWA05IGs0:APA91bHhEMla0FS_oJa_ATjuSUGUKzLt9lzRtJsHbKpoUWZ3jBakCNRNI4ay5VWDX0PCCiJ64WSWEj_tTv-3oOWABuhYtMo5M-OGjbL91qyZSGRnq4hAMwy-95gUSesKyqDD9v0naI2Q';
