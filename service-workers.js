@@ -95,6 +95,7 @@ self.addEventListener('push', function(event) {
 
 	try {
 		var data = event.data.json();
+		data = JSON.parse(data.notification.body);
 
 		if (('title' in data) && ('options' in data)) {
 
@@ -102,7 +103,7 @@ self.addEventListener('push', function(event) {
 		}
 	}
 	catch(error) {
-		//console.error(error);
+		console.error(error);
 	}
 });
 
