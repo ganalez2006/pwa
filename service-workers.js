@@ -93,6 +93,7 @@ self.addEventListener('push', function(event) {
 	console.debug(JSON.stringify(data_example));
 	/**/
 
+	console.debug(event);
 	try {
 		var data = event.data.json();
 		data = JSON.parse(data.notification.body);
