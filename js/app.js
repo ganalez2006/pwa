@@ -123,6 +123,9 @@ var app = {
 		messaging.getToken().then((currentToken) => {
 			if (currentToken) {
 				console.debug(currentToken);
+
+				app.listLog.innerHTML += '<li>currentToken</li>';
+				app.listLog.innerHTML += '<li>'+currentToken+'</li>';
 				//sendTokenToServer(currentToken);
 				//updateUIForPushEnabled(currentToken);
 			} else {
