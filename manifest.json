@@ -22,5 +22,11 @@
 	"background_color": "#0598EC", 
 	"theme_color": "red", 
 	"orientation": "portrait", 
-	"display": "standalone"
+	"display": "standalone",
+	"gcm_sender_id": "228335643470",
+	"serviceworker": {
+		"src": "service-workers.js",
+		"scope": "/",
+		"use_cache": true
+		}
 }

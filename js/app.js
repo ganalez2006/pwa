@@ -21,8 +21,8 @@ var app = {
 
 				if (permission == 'granted') {
 
-					// registrar serviceWorker
-					app.registerServiceWorker();
+					// suscribir usuario 
+					//app.registerSubscription();
 				} else {
 					// mostrar mensaje para notificaciones bloqueadas
 					app.msgNotificationDenied.classList.remove('hide');
@@ -38,6 +38,11 @@ var app = {
 	//
 	, init: () => {
 
+
+		if (app.serviceSupported()) {
+			// registrar serviceWorker
+			app.registerServiceWorker();
+		}
 
 		if (!app.serviceSupported()) {
 
@@ -68,7 +73,6 @@ var app = {
 				// Si es exitoso
 				console.log('SW registrado correctamente');
 				app.listLog.innerHTML += '<li>SW registrado correctamente</li>';
-				app.registerSubscription();
 			}, function(err) {
 				// Si falla
 				console.debug('SW error', err);
@@ -79,8 +83,9 @@ var app = {
 	// registrar suscripción en el servidor
 	, registerSubscription: () => {
 
-		var pushServerKey = ''
+		var pushServerKey = 'BD1q7scbIb_UGTNaRkU6MeHQrFx8FJnRjRUvT415NyhYzaer44Lsa7uldgPchm75xvprGc1n-PUNQUVxW6yZqqo';
 
+		/**
 		return navigator.serviceWorker.ready.then(serviceWorker => {
 			return serviceWorker.pushManager
 			.subscribe({
@@ -92,7 +97,43 @@ var app = {
 				return suscription;
 			});
 		});
+		/**/
+
+		navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
+			serviceWorkerRegistration.pushManager.subscribe({userVisibleOnly: true})
+			.then(function(subscription) {
+				if(subscription.endpoint.startsWith("https://android.googleapis.com/gcm/send")){
+					var parts = subscription.endpoint.split("/");
+					var registrationId = parts[parts.length -1];
+					console.log("RegistrationId:")
+					console.log(registrationId);
+				}
+			})
+			.catch(function(e) {
+				console.log('Something unfortunate happened: ' + e);
+			});
+		});
+
 	}
 };
 
 app.init();
+
+
+function showNotification(event) {
+
+	event.preventDefault();
+
+	Notification.requestPermission(function(result) {
+		if (result === 'granted') {
+			navigator.serviceWorker.ready.then(function(registration) {
+				registration.showNotification('Título de la notificación', {
+					// occiones
+					body: 'Mensaje de la notificación. 2'
+					, icon: './images/icons/launcher-icon-1x.png'
+					, tag: 'jgil-pwa-test'
+				});
+			});
+		}
+	});
+}
