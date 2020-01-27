@@ -58,11 +58,9 @@ $body = array(
 		)
 	);
 
-echo '<pre>'.json_encode($body).'</pre>';
-
 $to = [];
 $to['redmi'] = 'fTQIiN665_z6AuaWsarX6s:APA91bHIliwGYXaminX9bGxpdSucIWrt4p1CB53GkPhOWNnBsQSd7oNAZ18_z6U7G6pT4LR5oaYBj6f_lhVhrFYub1pdXXW3AwE8jLxkk0gHTF335SAK3PYZJByzBVbQOa9p0vo5Eo4R';
-$to['laptop'] = 'cjdd1DB4eY0w3cWA05IGs0:APA91bHhEMla0FS_oJa_ATjuSUGUKzLt9lzRtJsHbKpoUWZ3jBakCNRNI4ay5VWDX0PCCiJ64WSWEj_tTv-3oOWABuhYtMo5M-OGjbL91qyZSGRnq4hAMwy-95gUSesKyqDD9v0naI2Q';
+$to['laptop'] = 'cak_SHtwe5VvsZq0ddGuTo:APA91bHdKZxVjc7ALWs34H60lpKjWQ0h9acMwtjdEO2uopcDGMlV4xODjvPPNMKfV-gZ0A5tiDsxX7rgHN0TucUPcF_iTKu7gjUIpOO1LqNi77zbRkDXW82UI08rbyWQEhzsD9PR3Hyp';
 
 
 
@@ -70,8 +68,8 @@ $fields = array(
 	'notification' => array(
 		'body' => json_encode($body)
 		)
-	, 'to' =>  $to['laptop']
 	, 'to' =>  $to['redmi']
+	, 'to' =>  $to['laptop']
 	);
 
 $headers = array( 
@@ -90,3 +88,5 @@ $result = curl_exec($ch);
 curl_close($ch);
 
 echo $result;
+
+echo '<pre>'.json_encode($body).'</pre>';

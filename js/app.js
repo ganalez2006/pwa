@@ -11,31 +11,6 @@ var app = {
 	, serviceSupported: () => {
 		return ('serviceWorker' in navigator && 'PushManager' in window);
 	}
-	// Preguntar al usuario si quiere recibir notificaciones
-	, askNotificationPermission: () => {
-		
-		if (app.serviceSupported()) {
-
-			// Solicitar permisos
-			Notification.requestPermission()
-			.then((permission) => {
-
-				if (permission == 'granted') {
-
-					// suscribir usuario 
-					//app.registerSubscription();
-				} else {
-					// mostrar mensaje para notificaciones bloqueadas
-					app.msgNotificationDenied.classList.remove('hide');
-				}
-
-				// ocultar botón para suscripción
-				app.btnSubscription.classList.add('hide');
-			});
-		} else {
-			// Mostrar mensaje en caso de no soportar los servicios
-		}
-	}
 	// registrar serviceWorker
 	, registerServiceWorker: () => {
 		
@@ -54,40 +29,6 @@ var app = {
 				app.listLog.innerHTML += '<li>SW error</li>';
 			});
 		}
-	}
-	// registrar suscripción en el servidor
-	, registerSubscription: () => {
-
-		var pushServerKey = 'BD1q7scbIb_UGTNaRkU6MeHQrFx8FJnRjRUvT415NyhYzaer44Lsa7uldgPchm75xvprGc1n-PUNQUVxW6yZqqo';
-
-		/**
-		return navigator.serviceWorker.ready.then(serviceWorker => {
-			return serviceWorker.pushManager
-			.subscribe({
-				userVisibleOnly: true
-				, aplicationServerKey: pushServerKey
-			})
-			.then(subscription => {
-				console.debug('suscription', suscription);
-				return suscription;
-			});
-		});
-		/**/
-
-		navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
-			serviceWorkerRegistration.pushManager.subscribe({userVisibleOnly: true})
-			.then(function(subscription) {
-				if(subscription.endpoint.startsWith("https://android.googleapis.com/gcm/send")){
-					var parts = subscription.endpoint.split("/");
-					var registrationId = parts[parts.length -1];
-					console.log("RegistrationId:")
-					console.log(registrationId);
-				}
-			})
-			.catch(function(e) {
-				console.log('Something unfortunate happened: ' + e);
-			});
-		});
 	}
 	, firebaseMessaging: ''
 	, firebaseInit: () => {
@@ -121,6 +62,7 @@ var app = {
 		// Get Instance ID token. Initially this makes a network call, once retrieved
 		// subsequent calls to getToken will return from cache.
 		messaging.getToken().then((currentToken) => {
+
 			if (currentToken) {
 				console.debug('currentToken', currentToken);
 
@@ -169,19 +111,28 @@ var app = {
 			app.btnSubscription.classList.remove('hide');
 			app.btnSubscription.onclick = (e) => {
 				e.preventDefault();
-				//app.askNotificationPermission();
+
+				// Registrar al suscriptor
 				app.registerSubscriptionFirebase();
 			};
 		}
 
-		try {
-			app.firebaseMessaging.getToken().then((token) => { 
-				console.debug(token);
-			});
-		}
-		catch(error) {
-			console.error(error);
-		}
+		// token de usuario
+		navigator.serviceWorker.ready.then(function(registration) {
+			
+			if (Notification.permission === 'granted') {
+				try {
+					app.firebaseMessaging.getToken().then((token) => { 
+						console.debug(token);
+					});
+				}
+				catch(error) {
+					console.error(error);
+				}
+			}
+		});
+		/**/
+
 	}
 };
 
