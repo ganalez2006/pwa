@@ -112,7 +112,7 @@ self.addEventListener('push', function(event) {
 self.addEventListener('sync', function(event) {
 	console.debug(event.tag);
 
-	SWApp.syncLocales();
+	event.waitUntil(SWApp.syncLocales());
 });
 /**/
 

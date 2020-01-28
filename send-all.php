@@ -68,8 +68,9 @@ $fields = array(
 	'notification' => array(
 		'body' => json_encode($body)
 		)
-	, 'to' =>  $to['redmi']
-	, 'to' =>  $to['laptop']
+	//, 'to' =>  $to['redmi']
+	//, 'to' =>  $to['laptop']
+	, 'condition' => "!('enninguno' in topics)"
 	);
 
 $headers = array( 
