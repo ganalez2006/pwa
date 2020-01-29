@@ -65,7 +65,7 @@ $title = 'Hola mundo';
 $tag = 'tag-' . time();
 $icon = '';
 $image = '';
-$body = 'Mensaje de prueba';
+$body = '';
 
 $title = (array_key_exists('title', $_REQUEST) && $_REQUEST['title'] != '') ? $_REQUEST['title'] : $title;
 $icon = (array_key_exists('icon', $_REQUEST) && $_REQUEST['icon'] != '') ? $_REQUEST['icon'] : $icon;
