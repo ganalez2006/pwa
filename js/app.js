@@ -69,7 +69,7 @@ var app = {
 
 				app.showLog('currentToken:');
 				app.showLog(currentToken);
-				
+
 				// ocultar botón para suscripción
 				app.btnSubscription.classList.add('hide');
 
@@ -82,7 +82,7 @@ var app = {
 				app.showMsg('Se requieren permisos para el uso de este servicio.');
 			}
 		}).catch((err) => {
-			app.showMsg('Error al crear el token');
+			app.showMsg('Error al crear el token <br>' + err);
 			console.debug('Error al crear el token: ', err);
 		});
 	}
