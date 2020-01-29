@@ -130,8 +130,19 @@ self.addEventListener('notificationclick', event => {
 	if (event.action !== '')
 		console.debug(event.action);
 
-	if ((event.reply !== '') && (event.reply !== null))
+	if ((event.reply !== '') && (event.reply !== null)) {
+
 		console.debug(event.reply);
+
+		var data = {
+			title: event.notification.title
+			, body: event.notification.body
+			, reply: event.reply
+		}
+
+		saveReply(data)
+		.then(data => console.log(data));
+	}
 
 	event.notification.close();
 
@@ -171,4 +182,49 @@ var SWApp = {
 		console.debug('syncLocales');
 	}
 };
+
+async function saveReply(data) {
+
+
+	var date = new Date();
+
+	var _date = date.getFullYear();
+
+	var _month = date.getMonth() + 1;
+	_month = (_month < 10) ? '0' + _month : _month;
+	_date += "/" + _month;
+
+	var _day = date.getDate();
+	_day = (_day < 10) ? '0' + _day : _day;
+	_date += "/" + _day;
+	
+	var _hours = date.getHours();
+	_hours = (_hours < 10) ? '0' + _hours : _hours;
+
+	var _minutes = date.getMinutes();
+	_minutes = (_minutes < 10) ? '0' + _minutes : _minutes;
+
+	var _seconds = date.getSeconds();
+	_seconds = (_seconds < 10) ? '0' + _seconds : _seconds;
+
+	_date += " " + _hours;
+	_date += ":" + _minutes;
+	_date += ":" + _seconds;
+
+	var _reply = _date + " - " + data.title + " - " + data.body + " - " + data.reply;
+
+	// read our JSON
+	var misCabeceras = new Headers();
+
+	var miInit = { 
+		method: 'POST'
+		, headers: misCabeceras
+		//, mode: 'cors'
+		, mode: 'no-cors'
+		, cache: 'default'
+	};
+	
+	let response = await fetch(`https://ganalez-test.herokuapp.com/save-reply.php?reply=${_reply}`, miInit);
+	return response;
+}
 /**/
