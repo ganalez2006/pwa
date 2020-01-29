@@ -70,9 +70,6 @@ var app = {
 				app.showLog('currentToken:');
 				app.showLog(currentToken);
 
-				// ocultar botón para suscripción
-				app.btnSubscription.classList.add('hide');
-
 				// 
 				app.showMsg('Servicio de notificaciones activo.');
 
@@ -81,6 +78,9 @@ var app = {
 
 				app.showMsg('Se requieren permisos para el uso de este servicio.');
 			}
+
+			// ocultar botón para suscripción
+			app.btnSubscription.classList.add('hide');
 		}).catch((err) => {
 			app.showMsg('Error al crear el token <br>' + err);
 			console.debug('Error al crear el token: ', err);
@@ -129,14 +129,14 @@ var app = {
 
 							app.showLog('currentToken:');
 							app.showLog(currentToken);
+						}, function(err) {
+							// Si falla
+							app.showMsg('SW error', err);
 						});
 					}
 					catch(error) {
 						app.showMsg(error);
 					}
-				}, function(err) {
-					// Si falla
-					app.showMsg('SW error', err);
 				});
 				break;
 			}
