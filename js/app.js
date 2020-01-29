@@ -134,6 +134,9 @@ var app = {
 					catch(error) {
 						app.showMsg(error);
 					}
+				}, function(err) {
+					// Si falla
+					app.showMsg('SW error', err);
 				});
 				break;
 			}
