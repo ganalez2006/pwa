@@ -16,7 +16,16 @@
 
 	<style>
 	.hide {
-		display: none;
+		display: none !important;
+	}
+	#msgError {
+		width: 100%;
+		max-width: 300px;
+		padding: 15px;
+		border: 1px solid red;
+		border-radius: 4px;
+		margin: 2rem auto;
+		text-align: center;
 	}
 	#btnSubscription {
 		display: block;
@@ -38,21 +47,17 @@
 	#listLog {
 		max-width: 300px;
 		display: block;
-		margin: auto;
+		margin: 2rem auto;
+	}
+	#listLog li {
+		overflow-wrap: break-word;
 	}
 	</style>
 </head>
 <body>
-	<div id="msgServiceUnsupported" class="hide">
-		<p>
-			Mensaje servicio no soportado
-		</p>
-	</div>
 
-	<div id="msgNotificationDenied" class="hide">
-		<p>
-			Mensaje Notificaiones bloqueadas
-		</p>
+	<div id="msgError" class="hide">
+		asdfsgdhfgj
 	</div>
 
 	<button id="btnSubscription" class="hide">Suscribirse</button>
@@ -65,10 +70,10 @@
 
 	<ul id="listLog">
 		<li id="msgServiceUnsupported" class="hide">
-			Mensaje Notificaiones bloqueadas
+			Servicio no soportado
 		</li>
 		<li id="msgNotificationDenied" class="hide">
-			Mensaje Notificaiones bloqueadas
+			Notificaiones bloqueadas
 		</li>
 	</ul>
 

@@ -1,34 +1,22 @@
 "use strict";
 
 var app = {
-	msgServiceUnsupported: document.getElementById('msgServiceUnsupported')
-	, msgNotificationDenied: document.getElementById('msgNotificationDenied')
+	wrapMsg: document.getElementById('msgError')
 	, btnSubscription: document.getElementById('btnSubscription')
 	, listLog: document.getElementById('listLog')
-	, messaging: ''
 
-	// Comprobar el soporte de notificaciones push y serviceWorker
-	, serviceSupported: () => {
-		return ('serviceWorker' in navigator && 'PushManager' in window);
+	, msgServiceUnsupported: document.getElementById('msgServiceUnsupported')
+	, msgNotificationDenied: document.getElementById('msgNotificationDenied')
+
+
+	// Mostrar log
+	, showLog: (msg) => {
+		app.listLog.innerHTML += '<li>'+msg+'</li>';
 	}
-	// registrar serviceWorker
-	, registerServiceWorker: () => {
-		
-		if (app.serviceSupported()) {
-			
-			navigator.serviceWorker.register('./service-workers.js').then(function(registration) {
-				// Si es exitoso
-				console.log('SW registrado correctamente');
-				app.listLog.innerHTML += '<li>SW registrado correctamente</li>';
-
-				// cambiar el serviceWorker por defecto de firebase
-				app.firebaseMessaging.useServiceWorker(registration);
-			}, function(err) {
-				// Si falla
-				console.debug('SW error', err);
-				app.listLog.innerHTML += '<li>SW error</li>';
-			});
-		}
+	// Mostrar mensaje
+	, showMsg: (msg) => {
+		app.wrapMsg.classList.remove('hide');
+		app.wrapMsg.innerHTML = '<p>'+msg+'</p>';
 	}
 	, firebaseMessaging: ''
 	, firebaseInit: () => {
@@ -55,6 +43,20 @@ var app = {
 		// variable para uso de la aplicacion
 		app.firebaseMessaging = messaging;
 	}
+	// registrar serviceWorker
+	, registerServiceWorker: () => {
+		
+		navigator.serviceWorker.register('./service-workers.js').then(function(registration) {
+			// Si es exitoso
+			app.showLog('SW registrado correctamente');
+
+			// cambiar el serviceWorker por defecto de firebase
+			app.firebaseMessaging.useServiceWorker(registration);
+		}, function(err) {
+			// Si falla
+			app.showMsg('SW error', err);
+		});
+	}
 	, registerSubscriptionFirebase: () => {
 
 		const messaging = app.firebaseMessaging;
@@ -64,75 +66,80 @@ var app = {
 		messaging.getToken().then((currentToken) => {
 
 			if (currentToken) {
-				console.debug('currentToken', currentToken);
 
-				app.listLog.innerHTML += '<li>currentToken</li>';
-				app.listLog.innerHTML += '<li>'+currentToken+'</li>';
-				//sendTokenToServer(currentToken);
-				//updateUIForPushEnabled(currentToken);
+				app.showLog('currentToken:');
+				app.showLog(currentToken);
+				
+				// ocultar botón para suscripción
+				app.btnSubscription.classList.add('hide');
+
+				// 
+				app.showMsg('Servicio de notificaciones activo.');
+
+				// [Aquí] Funcion para enviar el token al servidor.
 			} else {
-			// Show permission request.
-			console.log('No Instance ID token available. Request permission to generate one.');
-			// Show permission UI.
-			//updateUIForPushPermissionRequired();
-			//setTokenSentToServer(false);
+
+				app.showMsg('Se requieren permisos para el uso de este servicio.');
 			}
 		}).catch((err) => {
-			console.log('An error occurred while retrieving token. ', err);
-			// showToken('Error retrieving Instance ID token. ', err);
-			//setTokenSentToServer(false);
+			app.showMsg('Error al crear el token');
+			console.debug('Error al crear el token: ', err);
 		});
 	}
-	//
+	// Funcion de inicio
 	, init: () => {
 
-		if (app.serviceSupported()) {
-
-			// iniciar servicios de firebase
-			app.firebaseInit();
-
-			// registrar serviceWorker
-			app.registerServiceWorker();
+		if (!('serviceWorker' in navigator && 'PushManager' in window)) {
+			app.showMsg('Servicio no disponible para este dispositivo.');
+			return;
 		}
 
-		if (!app.serviceSupported()) {
+		// iniciar servicios de firebase
+		app.firebaseInit();
 
-			// mostrar mensaje para navegadores sin soporte
-			app.msgServiceUnsupported.classList.remove('hide');
+		// registrar serviceWorker
+		app.registerServiceWorker();
+		
+		try {
+			switch(Notification.permission) {
 
-		} else if (Notification.permission === 'denied') {
+				case 'default':
+				// mostrar botón para suscripción
+				app.btnSubscription.classList.remove('hide');
+				app.btnSubscription.onclick = (e) => {
+					e.preventDefault();
 
-			// mostrar mensaje para notificaciones bloqueadas
-			app.msgNotificationDenied.classList.remove('hide');
+					// click para registrar suscriptor
+					app.registerSubscriptionFirebase();
+				};
+				break;
 
-		} else if (Notification.permission === 'default') {
-			
-			// mostrar botón para suscripción
-			app.btnSubscription.classList.remove('hide');
-			app.btnSubscription.onclick = (e) => {
-				e.preventDefault();
+				case 'denied':
+				app.showMsg('Servicio de notificaciones desactivado por el usuario.');
+				break;
 
-				// Registrar al suscriptor
-				app.registerSubscriptionFirebase();
-			};
-		}
+				case 'granted':
+				app.showMsg('Servicio de notificaciones activo.');
 
-		// token de usuario
-		navigator.serviceWorker.ready.then(function(registration) {
-			
-			if (Notification.permission === 'granted') {
-				try {
-					app.firebaseMessaging.getToken().then((token) => { 
-						console.debug(token);
-					});
-				}
-				catch(error) {
-					console.error(error);
-				}
+				// token de usuario
+				navigator.serviceWorker.ready.then(function(registration) {
+					
+					try {
+						app.firebaseMessaging.getToken().then((currentToken) => { 
+
+							app.showLog('currentToken:');
+							app.showLog(currentToken);
+						});
+					}
+					catch(error) {
+						app.showMsg(error);
+					}
+				});
+				break;
 			}
-		});
-		/**/
-
+		} catch(err) {
+			app.showMsg(err);
+		};
 	}
 };
 
