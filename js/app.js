@@ -129,6 +129,12 @@ var app = {
 
 							app.showLog('currentToken:');
 							app.showLog(currentToken);
+
+							// send token to SW
+							registration.active.postMessage({
+								currentToken: currentToken
+							});
+							/**/
 						}, function(err) {
 							// Si falla
 							app.showMsg('SW error', err);

@@ -58,45 +58,54 @@ self.addEventListener("fetch", function(event) {
 // Evento al recibir una peticion push desde el backend
 self.addEventListener('push', function(event) {
 
-	/*/ Push data example
+	// Push data example
 	var tag = new Date();
 	tag = tag.getTime();
 
 	var data_example = {
-		title: 'Título'
-		, options: {
-			body: 'Mensaje'
-			, tag: 'push-' + tag
-			, vibrate: [200, 100, 200]
-			, renotify: true
-			, icon: './images/icons/launcher-icon-1x.png'
-			, image: './images/p3.jpg' //Relacion aspecto 10:4
-			, actions: [
-				{
-					action: 'reply'
-					, title: 'Responder'
-					, type: 'text'
-					, placeholder: 'Escribe tu respuesta'
+		notification: {
+			body: {
+				title: 'Título'
+				, options: {
+					body: 'Mensaje'
+					, tag: 'push-' + tag
+					, vibrate: [200, 100, 200]
+					, renotify: true
+					, icon: './images/icons/launcher-icon-1x.png'
+					, image: './images/p3.jpg' //Relacion aspecto 10:4
+					, actions: [
+						{
+							action: 'reply'
+							, title: 'Responder'
+							, type: 'text'
+							, placeholder: 'Escribe tu respuesta'
+						}
+						, {
+							action: 'action'
+							, title: 'Me interesa'
+							, type: 'button'
+						}
+					]
+					, data: {
+						id: 9999
+						, url: 'https://google.com'
+					}
 				}
-				, {
-					action: 'action'
-					, title: 'Me interesa'
-					, type: 'button'
-				}
-			]
-			, data: {
-				id: 9999
-				, url: 'https://google.com'
 			}
 		}
 	};
-	console.debug(JSON.stringify(data_example));
 	/**/
 
 	console.debug(event);
 	try {
+		// Datos de prueba
+		var data = data_example.notification.body;
+		/**/
+
+		/*/ Produccion
 		var data = event.data.json();
 		data = JSON.parse(data.notification.body);
+		/**/
 
 		if (('title' in data) && ('options' in data)) {
 
@@ -107,6 +116,32 @@ self.addEventListener('push', function(event) {
 		console.error(error);
 	}
 });
+
+// Evento al recibir un mensaje desde el cliente
+self.addEventListener('message', function(event) {
+	console.debug(event);
+	console.debug(event.target);
+	console.debug(event.target.clients.matchAll());
+
+	event.waitUntil(async function() {
+		console.debug(clients);
+
+		//
+		const allClients = await event.target.clients.matchAll({
+			//includeUncontrolled: true
+		});
+		console.debug(allClients);
+		/**/
+	});
+
+	if (event.data.hasOwnProperty('currentToken')) {
+		//console.debug(window);
+		//localStorage.setItem('currentToken', event.data.currentToken);
+	}
+
+	//event.waitUntil(SWApp.syncLocales());
+});
+/**/
 
 // Evento al recibir una peticion sync desde el backend
 self.addEventListener('sync', function(event) {
@@ -125,28 +160,29 @@ self.addEventListener('notificationclose', event => {
 // Evento al hacer click en la notificacion
 self.addEventListener('notificationclick', event => {
 
-	console.debug(event);
+	//console.debug(event);
+	//console.debug(event.notification.data);
 
 	if (event.action !== '')
 		console.debug(event.action);
 
 	if ((event.reply !== '') && (event.reply !== null)) {
 
-		console.debug(event.reply);
-
 		var data = {
-			title: event.notification.title
+			notification_id: event.notification.data.id
+			, title: event.notification.title
 			, body: event.notification.body
 			, reply: event.reply
 		}
 
-		saveReply(data)
-		.then(data => console.log(data));
+		SWApp.saveReply(data)
+		.then(response => {
+			console.log(response);
+		});
 	}
 
 	event.notification.close();
 
-	console.debug(event.notification.data);
 	/*/ Para redireccionar a la url especificada por el cliente
 	try {
 		if (event.notification.data.url)
@@ -181,50 +217,31 @@ var SWApp = {
 	syncLocales : () => {
 		console.debug('syncLocales');
 	}
+	, saveReply: async (data) => {
+
+		var _data = '';
+		for (var i in data) {
+			if (data.hasOwnProperty(i)) {
+				_data += data[i] + '|';
+			}
+		}
+
+		// Send reply
+		var _headers = new Headers();
+		var miInit = { 
+			method: 'POST'
+			, headers: _headers
+			//, mode: 'cors'
+			, mode: 'no-cors'
+			, cache: 'default'
+			, body: JSON.stringify({
+				reply: _data
+			})
+		};
+		
+		//let response = await fetch(`https://ganalez-test.herokuapp.com/save-reply.php?reply=${_reply}`, miInit);
+		//let response = await fetch(`http://localhost/pwa/save-reply.php?reply=${_reply}`, miInit);
+		let response = await fetch('http://localhost/pwa/save-reply.php', miInit);
+		return response;
+	}
 };
-
-async function saveReply(data) {
-
-
-	var date = new Date();
-
-	var _date = date.getFullYear();
-
-	var _month = date.getMonth() + 1;
-	_month = (_month < 10) ? '0' + _month : _month;
-	_date += "/" + _month;
-
-	var _day = date.getDate();
-	_day = (_day < 10) ? '0' + _day : _day;
-	_date += "/" + _day;
-	
-	var _hours = date.getHours();
-	_hours = (_hours < 10) ? '0' + _hours : _hours;
-
-	var _minutes = date.getMinutes();
-	_minutes = (_minutes < 10) ? '0' + _minutes : _minutes;
-
-	var _seconds = date.getSeconds();
-	_seconds = (_seconds < 10) ? '0' + _seconds : _seconds;
-
-	_date += " " + _hours;
-	_date += ":" + _minutes;
-	_date += ":" + _seconds;
-
-	var _reply = _date + " - " + data.title + " - " + data.body + " - " + data.reply;
-
-	// read our JSON
-	var misCabeceras = new Headers();
-
-	var miInit = { 
-		method: 'POST'
-		, headers: misCabeceras
-		//, mode: 'cors'
-		, mode: 'no-cors'
-		, cache: 'default'
-	};
-	
-	let response = await fetch(`https://ganalez-test.herokuapp.com/save-reply.php?reply=${_reply}`, miInit);
-	return response;
-}
-/**/
