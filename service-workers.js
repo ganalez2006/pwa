@@ -239,9 +239,8 @@ var SWApp = {
 			})
 		};
 		
-		//let response = await fetch(`https://ganalez-test.herokuapp.com/save-reply.php?reply=${_reply}`, miInit);
-		//let response = await fetch(`http://localhost/pwa/save-reply.php?reply=${_reply}`, miInit);
-		let response = await fetch('http://localhost/pwa/save-reply.php', miInit);
+		//let response = await fetch('http://localhost/pwa/save-reply.php', miInit);
+		let response = await fetch('https://ganalez-test.herokuapp.com/save-reply.php', miInit);
 		return response;
 	}
 };
