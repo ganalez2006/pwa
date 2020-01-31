@@ -58,7 +58,7 @@ self.addEventListener("fetch", function(event) {
 // Evento al recibir una peticion push desde el backend
 self.addEventListener('push', function(event) {
 
-	// Push data example
+	/*/ Push data example
 	var tag = new Date();
 	tag = tag.getTime();
 
@@ -98,11 +98,11 @@ self.addEventListener('push', function(event) {
 
 	console.debug(event);
 	try {
-		// Datos de prueba
+		/*/ Datos de prueba
 		var data = data_example.notification.body;
 		/**/
 
-		/*/ Produccion
+		// Produccion
 		var data = event.data.json();
 		data = JSON.parse(data.notification.body);
 		/**/
